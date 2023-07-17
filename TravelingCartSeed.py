@@ -1,5 +1,6 @@
 import TravelingCart
 import heapq
+import Utility
 
 class Constraint:
 
@@ -16,8 +17,9 @@ class Constraint:
         return len(self.toFind) == 0
     
     def updateCompleted(self, foundItems):
-        updatedItems = self.toFind & set(foundItems)
-        self.toFind -= set(foundItems)
+        fIS = set(foundItems)
+        updatedItems = self.toFind & fIS
+        self.toFind -= fIS
         return updatedItems
 
 class PartConstr(Constraint):
@@ -30,16 +32,12 @@ class PartConstr(Constraint):
         return len(self.toFind) <= (len(self.itemList) - self.minReq)
 
 def isValidDay(day):
-    if day % 7 == 0 or day % 7 == 5:
+    if day % 7 in (0,5):
         return True
     return False
 
 def nextValidDay(day):
     return day + (5 if day%7 < 5 else 7) - (day % 7)
-    #if day % 7 < 5:
-    #    return day + (5 - (day % 7))
-    #else:
-    #    return day + (7 - (day % 7))
 
 def checkSeed(seed, constrList):
 
@@ -63,7 +61,7 @@ def checkSeed(seed, constrList):
             if newEv[1] == 1:   #Remove constraint
                 if not constrList[newEv[2]].isCompleted():
                     return False, dict()
-                actConstrInd -= set(newEv[2])
+                actConstrInd -= set([newEv[2]])
             elif newEv[1] == 0: #Add constraint
                 actConstrInd.add(newEv[2])
             else:
@@ -82,9 +80,9 @@ def checkSeed(seed, constrList):
             found = set()
             toDelete = set()
             for i in actConstrInd:
-                found = found.union(constrList[actConstrInd].updateCompleted(stock.keys))
-                if constrList[actConstrInd].isCompleted():
-                    toDelete.add(actConstrInd)
+                found = found.union(constrList[i].updateCompleted(stock.keys()))
+                if constrList[i].isCompleted():
+                    toDelete.add(i)
             actConstrInd -= toDelete
             if len(found) > 0:
                 shopList[currDay] = found
@@ -97,5 +95,13 @@ def checkSeed(seed, constrList):
     return False, dict()
 
 
+def convertItemList(itemNameList):
+    return set(map(lambda x : int(x) if x.isnumeric() else TravelingCart.ObjectIDFromName[x], itemNameList))
+
 if __name__ == "__main__":
-    print(TravelingCart.checkDay(348336924,11,[264]))
+    pass
+    #for i in range(12,55,7):
+    #    print(i,TravelingCart.getTravelingMerchantStock(100,i).keys())
+    #    print(i+2,TravelingCart.getTravelingMerchantStock(100,i+2).keys())
+    #res = checkSeed(100,[Constraint([766,415], (8,19))])
+    #print(res[1])
