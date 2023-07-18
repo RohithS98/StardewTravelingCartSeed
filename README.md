@@ -14,3 +14,6 @@ If you want to list items and find seeds where at least 'X' of the items are ava
 
 ## Searching
 Once everything is entered, click the search button. If there are any errors or issues with the inputs, it will be displayed in the output box. Otherwise, the search will start and once completed, will display how many matching seeds were found. This takes some time and may show up as "Not responding" currently, but just be patient.
+
+## Issues
+This is still a work in progress, so there are a few issues. I will add a progress bar and make it so the program doesn't show as not responding when searching.
