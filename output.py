@@ -162,7 +162,8 @@ class Ui_Form(object):
     def writeToFile(self, seed, days):
         with open(self.op,'a') as f:
             f.write("Seed "+str(seed)+"\n")
-            f.write(str(days))
+            for d in sorted(days.keys()):
+                f.write("Day " + str(d) + ": " + str(days[d])+'\n')
             f.write('\n')
     
     def search(self):
